@@ -16,3 +16,7 @@ func (p *PicturesToBeFetched) Validate() error {
 	}
 	return nil
 }
+
+type UrlList struct {
+	Urls []string
+}
