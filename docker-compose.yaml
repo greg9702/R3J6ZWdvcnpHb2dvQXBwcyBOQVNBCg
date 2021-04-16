@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  url-collector:
+    container_name: "url-collector"
+    build: url-collector/.
+    env_file:
+      - .env
+    ports: 
+      - ${PORT}:${PORT}
+
+volumes:
+  data:
