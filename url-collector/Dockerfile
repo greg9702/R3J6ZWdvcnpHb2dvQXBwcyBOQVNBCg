@@ -1,6 +1,6 @@
 FROM golang:1.16.3-alpine3.13 as builder
 
-COPY go.mod /src/url-collector/
+COPY go.mod go.sum /src/url-collector/
 WORKDIR /src/url-collector/
 RUN go mod download
 COPY . /src/url-collector/
