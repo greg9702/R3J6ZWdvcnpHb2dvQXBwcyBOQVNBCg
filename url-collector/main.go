@@ -3,6 +3,7 @@ package main
 import (
 	"os"
 	"url-collector/url-collector/api"
+	"url-collector/url-collector/executor"
 	"url-collector/url-collector/fetcher"
 
 	"github.com/gin-contrib/cors"
@@ -17,8 +18,8 @@ func main() {
 	router := gin.Default()
 	router.Use(cors.Default())
 
-	executor := fetcher.NewLimitAwareExecutor()
-	nasaFetcher := fetcher.NewNasaFetcher(executor)
+	jobExec := executor.NewLimitAwareExecutor()
+	nasaFetcher := fetcher.NewNasaFetcher(jobExec)
 
 	picturesController := api.NewPicturesController(nasaFetcher)
 
