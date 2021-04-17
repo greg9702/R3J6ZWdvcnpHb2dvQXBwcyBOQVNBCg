@@ -1,20 +1,40 @@
 package utils
 
 import (
+	"errors"
 	"time"
 )
 
-func GetListOfDate(startDate time.Time, endDate time.Time) []string {
+func GetListOfDate(startDate, endDate time.Time) ([]string, error) {
 
 	var dateStringList []string
 
-	dateStringList = append(dateStringList, "?date=2020-07-01")
-	dateStringList = append(dateStringList, "?date=2020-07-02")
-	dateStringList = append(dateStringList, "?date=2020-07-03")
-	dateStringList = append(dateStringList, "?date=2020-07-04")
-	dateStringList = append(dateStringList, "?date=2020-07-05")
-	dateStringList = append(dateStringList, "?date=2020-07-06")
-	dateStringList = append(dateStringList, "?date=2020-07-07")
+	if endDate.Before(startDate) {
+		return dateStringList, errors.New("End date is before start date")
+	}
 
-	return dateStringList
+	for rd := rangeDate(startDate, endDate); ; {
+		date := rd()
+		if date.IsZero() {
+			break
+		}
+		dateStringList = append(dateStringList, date.Format("2006-01-02"))
+	}
+	return dateStringList, nil
+}
+
+func rangeDate(start, end time.Time) func() time.Time {
+	y, m, d := start.Date()
+	start = time.Date(y, m, d, 0, 0, 0, 0, time.UTC)
+	y, m, d = end.Date()
+	end = time.Date(y, m, d, 0, 0, 0, 0, time.UTC)
+
+	return func() time.Time {
+		if start.After(end) {
+			return time.Time{}
+		}
+		date := start
+		start = start.AddDate(0, 0, 1)
+		return date
+	}
 }

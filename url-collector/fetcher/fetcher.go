@@ -24,9 +24,9 @@ func NewNasaFetcher(executor ExecutorInterface) FetcherInterface {
 func (nf *nasaFetcher) FetchData(object interface{}) ([]string, error) {
 	var returnList []string
 
-	dateRange := object.(*models.PicturesToBeFetched)
+	picturesDateRange := object.(*models.PicturesToBeFetched)
 
-	requestsParams, err := nf.prepareRequestArguments(dateRange.StartDate, dateRange.EndDate)
+	requestsParams, err := nf.prepareRequestArguments(picturesDateRange.StartDate, picturesDateRange.EndDate)
 
 	if err != nil {
 		return returnList, err
@@ -56,6 +56,11 @@ func (nf *nasaFetcher) FetchData(object interface{}) ([]string, error) {
 
 // prepareRequestArguments is very flexible, if we want to add more params to request, we can do it here
 func (nf *nasaFetcher) prepareRequestArguments(startDate time.Time, endDate time.Time) ([]string, error) {
-	dateList := utils.GetListOfDate(startDate, endDate)
+	dateList, err := utils.GetListOfDate(startDate, endDate)
+
+	if err != nil {
+		return dateList, err
+	}
+
 	return dateList, nil
 }
