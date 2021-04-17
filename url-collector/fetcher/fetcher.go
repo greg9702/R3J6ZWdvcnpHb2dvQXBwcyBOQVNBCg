@@ -28,7 +28,7 @@ func NewNasaFetcher(exec executor.ExecutorInterface) FetcherInterface {
 }
 
 func (nf *nasaFetcher) FetchData(object interface{}) ([]string, error) {
-	var returnList []string
+	returnList := make([]string, 0)
 
 	picturesDateRange := object.(*models.PicturesToBeFetched)
 
