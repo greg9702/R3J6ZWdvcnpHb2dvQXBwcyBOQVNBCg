@@ -14,6 +14,11 @@ func (p *PicturesToBeFetched) Validate() error {
 	if p.EndDate.Before(p.StartDate) {
 		return errors.New("End date is before start date")
 	}
+	// we do not let inserting dates higher than today, Nasa API doesnt like it
+	if p.EndDate.After(time.Now()) {
+		return errors.New("End date is after today's date")
+	}
+
 	return nil
 }
 
