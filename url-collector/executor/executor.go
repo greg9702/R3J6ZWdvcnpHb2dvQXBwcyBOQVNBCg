@@ -1,4 +1,4 @@
-package fetcher
+package executor
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	maxCoLimit = 2
+	maxCoLimit = 5
 )
 
 type ExecutorInterface interface {
@@ -54,7 +54,6 @@ func (le *LimitAwareExecutor) spawnWorker(id int, initWaitGroup *sync.WaitGroup)
 	fmt.Printf("Spawning worker %d\n", id)
 	initWaitGroup.Done()
 	for job := range le.jobs {
-		fmt.Printf("[%d] executing new task\n", id)
 		job.Execute()
 	}
 	fmt.Printf("Worker %d exiting\n", id)
