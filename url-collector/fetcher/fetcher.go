@@ -70,8 +70,6 @@ func (nf *nasaFetcher) prepareRequestArguments(startDate time.Time, endDate time
 		return resultParamList, err
 	}
 
-	// prepare API key here
-
 	apiKey := defaultApiKey
 
 	apiKeyString := os.Getenv("API_KEY")
