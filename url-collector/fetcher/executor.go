@@ -2,6 +2,8 @@ package fetcher
 
 import (
 	"fmt"
+	"os"
+	"strconv"
 	"sync"
 )
 
@@ -20,8 +22,18 @@ type LimitAwareExecutor struct {
 
 func NewLimitAwareExecutor() ExecutorInterface {
 	executorLimit := maxCoLimit
+	var err error
 
-	// TODO Get limit from config
+	limitOfExecutorFromEnv := os.Getenv("CONCURRENT_REQUESTS")
+
+	if limitOfExecutorFromEnv != "" {
+		executorLimit, err = strconv.Atoi(limitOfExecutorFromEnv)
+		if err != nil {
+			fmt.Println("Unable to parse CONCURRENT_REQUESTS to int value, using default value")
+			executorLimit = maxCoLimit
+		}
+	}
+
 	le := LimitAwareExecutor{executorLimit, make(chan JobInterface, 100)}
 
 	var initWaitGroup sync.WaitGroup
