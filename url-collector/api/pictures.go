@@ -2,17 +2,18 @@ package api
 
 import (
 	"net/http"
+	"url-collector/url-collector/fetcher"
 	"url-collector/url-collector/models"
 
 	"github.com/gin-gonic/gin"
 )
 
 type picturesController struct {
-	// TODO
+	dataFetcher fetcher.FetcherInterface
 }
 
-func NewPicturesController() *picturesController {
-	p := picturesController{}
+func NewPicturesController(fetcher fetcher.FetcherInterface) *picturesController {
+	p := picturesController{fetcher}
 	return &p
 }
 
@@ -37,7 +38,16 @@ func (pc *picturesController) GetImages(ctx *gin.Context) {
 		return
 	}
 
+	urlList, err := pc.dataFetcher.FetchData(pictures)
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
 	ctx.JSON(http.StatusOK, gin.H{
-		"text": "ok",
+		"urls": urlList,
 	})
 }
